@@ -1,0 +1,27 @@
+- platform: time_date
+  display_options: 
+   - 'time'
+   - 'date'
+   - 'date_time'
+   - 'date_time_utc'
+   - 'date_time_iso'
+   - 'time_date'
+   - 'time_utc'
+   - 'beat'
+- platform: template
+  sensors:
+        day:
+          value_template: >
+            {% set days = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"] %}
+            
+            {{ days[now().weekday()] }}
+        month:
+        value_template: >
+          {% set months = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"] %}
+          
+          {{ months[now().month-1] }}
+          {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+
+        date_string:
+          friendly_name: "Full Date"
+          value_template: "{{ states('sensor.day') }} ,  {{ states('sensor.month') }}日"
