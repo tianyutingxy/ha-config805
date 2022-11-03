@@ -1,0 +1,132 @@
+# only can used in yaml mode
+button_card_templates:
+  !include_dir_merge_named button_card_templates
+
+views:
+  - theme: Backend-selected
+    type: custom:grid-layout
+    title: 首页
+    layout:
+      margin: 0
+      grid-gap: 1.3vw
+      grid-template-columns: repeat(4, 1fr) 0
+      grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+      grid-template-areas: |
+        "sidebar  .           .       .          ."
+        "sidebar  bedroom     studio  bathroom   ."
+        "sidebar  media       .       .          ."
+        "sidebar  footer      footer  footer     ."
+    icon: mdi:devices
+    path: devices
+    badges: []
+    cards:
+      - type: vertical-stack
+        view_layout:
+          grid-area: sidebar
+        cards:
+
+          - type: custom:button-card
+            entity: sensor.template_sidebar
+            template: sidebar
+
+      - square: false
+        columns: 2
+        type: grid
+        title: 卧室
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.ceiling1_cloud_812440
+            icon: mdi:ceiling-light-outline
+            fill_container: false
+            primary_info: name
+            use_light_color: true
+            show_brightness_control: false
+            show_color_temp_control: false
+            show_color_control: false
+            collapsible_controls: true
+            secondary_info: state
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: none
+          - type: custom:mushroom-climate-card
+            entity: climate.lumi_v2_c5cc_air_conditioner
+            icon: mdi:toggle-switch-off
+            name: 空调
+            secondary_info: state
+            double_tap_action:
+              action: none
+            tap_action:
+              action: none
+            hold_action:
+              action: more-info
+          - type: custom:mushroom-fan-card
+            entity: fan.m1_cloud_506323
+            name: 净化器
+            icon_animation: true
+            secondary_info: state
+            show_oscillate_control: false
+            show_percentage_control: false
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            double_tap_action:
+              action: none
+        view_layout:
+          grid-area: bedroom
+      - square: false
+        columns: 1
+        type: grid
+        title: plex
+        cards:
+          - type: custom:button-card
+            entity: sensor.plex_recently_added
+            name: plex
+            template:
+              - conditional_media
+              - icon_plex
+            tap_action:
+              action: none
+        view_layout:
+          grid-area: media
+
+  
+  - theme: Backend-selected
+    title: 天气
+    path: ''
+    icon: mdi:weather-cloudy
+    type: custom:masonry-layout
+    badges: []
+    background: >-
+      center / cover no-repeat fixed
+      url('https://raw.githubusercontent.com/basnijholt/lovelace-ios-dark-mode-theme/master/backgrounds/homekit-bg-3.jpeg')
+    cards:
+      - type: custom:simple-weather-card
+        entity: weather.forecast_wang_jing_xi_yuan_si_qu_410yi_805
+        name: 望京西园四区
+        backdrop:
+          day: var(--primary-color)
+          night: '#40445a'
+      - type: weather-forecast
+        entity: weather.forecast_wang_jing_xi_yuan_si_qu_410yi_805
+  - theme: Backend-selected
+    title: 扫地机
+    path: vacuum
+    icon: mdi:robot-vacuum
+    type: custom:masonry-layout
+    badges: []
+    cards:
+      - type: custom:xiaomi-vacuum-map-card
+        entity: vacuum.rockrobo_v1_5f71_robot_cleaner
+        title: 扫地机器人
+        map_locked: true
+        vacuum_platform: default
+        two_finger_pan: true
+        map_source:
+          camera: camera.xiaomi_cloud_map_extractor
+        calibration_source:
+          camera: true
+

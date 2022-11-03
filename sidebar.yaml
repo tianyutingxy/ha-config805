@@ -1,0 +1,52 @@
+- sensor:
+    - unique_id: sidebar
+      state: template
+      attributes:
+        time: >
+          <font color='#6a7377' style='font-size:4vw'><b>
+          {% set hours = now().strftime('%H') %}
+          {% set minutes = now().strftime('%M') %}
+          <span>
+            {{ hours }}<span class="time-colon">:</span>{{ minutes }}
+          </span>
+          </b></font>
+        date: >
+          <font color='#6a7377'><b>
+          {% if strptime(states('sensor.date'), '%Y-%m-%d').day != None %}
+          {% set days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'] %}
+          {% set months = ['1月', '2月', '3月', '4月', '5月', '6月',
+          '7月', '8月', '9月', '10月', '11月', '12月'] %}
+            {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} {{ months[now().month-1] }}<br>
+            {{ days[now().weekday()] }}
+          {% endif %}
+          </b></font>
+        greet: >
+          <b>
+          {% set time = now().hour %}
+          {% if time <= 3 %} 早点休息吧！ {{'\U0001F611'}}
+          {% elif time <= 7 %} 早上好！ {{'\U0001F4A9'}}
+          {% elif time <= 12 %} 上午好！ {{'\U0001F60A'}}
+          {% elif time <= 15 %} 饮茶！ {{'\U0001F60E'}}
+          {% elif time <= 17 %} 晚饭时间！ {{'\U0001F44B\U0001F3FB'}}
+          {% elif time <= 22 %} 晚上好！ {{'\U0001F60C'}}
+          {% elif time <= 23 %} 早点休息吧 {{'\U0001F974'}}
+          {% else %} 新的一天！ {{'\U0001F974'}}
+          {% endif %}
+          </b>
+        weather: >
+          <b>
+          {% set entity = 'weather.forecast_wang_jing_xi_yuan_si_qu_410yi_805' %}
+          {% if not is_state(entity, 'unknown') %}
+            {% set temp = state_attr(entity, 'temperature') | round %}
+            {% set des = states(entity) %}
+              当前天气 :{{ temp }}°C ,{{ des }}
+          {% else %}
+            天气获取失败...
+          {% endif %}
+          </b>
+        vacuum: >
+          <br>
+          {% set entity = 'vacuum.rockrobo_v1_5f71_robot_cleaner' %}
+          {% set vacuum_des = state_attr(entity, 'vacuum.status_desc') %}
+            <font color='#6a7377'>扫地机状态：{{ vacuum_des }}</font>
+        

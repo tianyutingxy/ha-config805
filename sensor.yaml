@@ -8,6 +8,7 @@
    - 'time_date'
    - 'time_utc'
    - 'beat'
+
 - platform: template
   sensors:
         day:
@@ -25,3 +26,14 @@
         date_string:
           friendly_name: "Full Date"
           value_template: "{{ states('sensor.day') }} ,  {{ states('sensor.month') }}日"
+
+# https://github.com/NemesisRE/sensor.plex_recently_added
+- platform: plex_recently_added
+  host: !secret nas_host
+  port: !secret plex_port
+  token: !secret plex_token
+  max: 1
+  img_dir: /
+  image_resolution: 800
+  
+  
